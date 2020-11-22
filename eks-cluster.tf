@@ -33,7 +33,7 @@ resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSVPCResourceContr
 resource "aws_security_group" "eks-cluster" {
   name        = "terraform-eks-go"
   description = "Cluster communication with worker nodes"
-  vpc_id      = aws_vpc.demo.id
+  vpc_id      = aws_vpc.go.id
 
   egress {
     from_port   = 0
