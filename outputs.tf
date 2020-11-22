@@ -13,7 +13,7 @@ metadata:
   namespace: kube-system
 data:
   mapRoles: |
-    - rolearn: ${aws_iam_role.go-node.arn}
+    - rolearn: ${aws_iam_role.eks-cluster-node.arn}
       username: system:node:{{EC2PrivateDNSName}}
       groups:
         - system:bootstrappers
