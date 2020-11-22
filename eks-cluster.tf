@@ -63,7 +63,7 @@ resource "aws_eks_cluster" "go" {
 
   vpc_config {
     security_group_ids = [aws_security_group.eks-cluster.id]
-    subnet_ids         = aws_subnet.demo[*].id
+    subnet_ids         = aws_subnet.go[*].id
   }
 
   depends_on = [
