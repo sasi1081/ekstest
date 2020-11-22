@@ -1,11 +1,9 @@
-#
-# EKS Worker Nodes Resources
-#  * IAM role allowing Kubernetes actions to access other AWS services
-#  * EKS Node Group to launch worker nodes
-#
 
-resource "aws_iam_role" "demo-node" {
-  name = "terraform-eks-demo-node"
+# EKS Worker Nodes
+
+
+resource "aws_iam_role" "worker-node" {
+  name = "terraform-eks-worker-node"
 
   assume_role_policy = <<POLICY
 {
@@ -23,25 +21,25 @@ resource "aws_iam_role" "demo-node" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "demo-node-AmazonEKSWorkerNodePolicy" {
+resource "aws_iam_role_policy_attachment" "worker-node-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = aws_iam_role.demo-node.name
+  role       = aws_iam_role.worker-node.name
 }
 
-resource "aws_iam_role_policy_attachment" "demo-node-AmazonEKS_CNI_Policy" {
+resource "aws_iam_role_policy_attachment" "worker-node-AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.demo-node.name
+  role       = aws_iam_role.worker-node.name
 }
 
-resource "aws_iam_role_policy_attachment" "demo-node-AmazonEC2ContainerRegistryReadOnly" {
+resource "aws_iam_role_policy_attachment" "worker-node-AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.demo-node.name
+  role       = aws_iam_role.worker-node.name
 }
 
-resource "aws_eks_node_group" "demo" {
-  cluster_name    = aws_eks_cluster.demo.name
-  node_group_name = "demo"
-  node_role_arn   = aws_iam_role.demo-node.arn
+resource "aws_eks_node_group" "go" {
+  cluster_name    = aws_eks_cluster.go.name
+  node_group_name = "gotest"
+  node_role_arn   = aws_iam_role.worker-node.arn
   subnet_ids      = aws_subnet.demo[*].id
 
   scaling_config {
@@ -51,8 +49,8 @@ resource "aws_eks_node_group" "demo" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.demo-node-AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.demo-node-AmazonEKS_CNI_Policy,
-    aws_iam_role_policy_attachment.demo-node-AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.worker-node-AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.worker-node-AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.worker-node-AmazonEC2ContainerRegistryReadOnly,
   ]
 }
